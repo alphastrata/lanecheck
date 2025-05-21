@@ -1,0 +1,13 @@
+[package]
+name = "lanecheck"
+version = "0.1.0"
+edition = "2024"
+description = """
+lanecheck is a simple cli tool that will give you a diagnostic readout of what SIMD features your _current_ machine's CPU supports.
+"""
+authors = ["jer<alphastrata@gmail.com>"]
+
+[dependencies]
+colored = "3.0.0"
+prettytable-rs = "0.10.0"
+raw-cpuid = "11.5.0"
