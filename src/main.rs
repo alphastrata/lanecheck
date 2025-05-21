@@ -24,203 +24,165 @@ fn main() {
         );
     }
 
-    // Create SIMD features table
-    let mut table = Table::new();
-    table.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
-    table.set_titles(row![
-        "Category".yellow().bold(),
-        "Feature".yellow().bold(),
-        "Supported".yellow().bold(),
-        "Usage".yellow().bold()
-    ]);
-
-    let mut features: BTreeMap<&str, (&str, bool, &str)> = BTreeMap::new();
+    // Group features by category
+    let mut features: BTreeMap<&str, Vec<(&str, bool, &str)>> = BTreeMap::new();
 
     // Basic and legacy features
     if let Some(feature_info) = cpuid.get_feature_info() {
-        features.insert(
+        features.entry("Legacy").or_default().push((
             "mmx",
-            ("Legacy", feature_info.has_mmx(), "64-bit vector (integers)"),
-        );
-        features.insert(
+            feature_info.has_mmx(),
+            "64-bit vector (integers)",
+        ));
+        features.entry("Basic").or_default().push((
             "sse",
-            ("Basic", feature_info.has_sse(), "128-bit vector (4 x f32)"),
-        );
-        features.insert(
+            feature_info.has_sse(),
+            "128-bit vector (4 x f32)",
+        ));
+        features.entry("Basic").or_default().push((
             "sse2",
-            ("Basic", feature_info.has_sse2(), "128-bit vector (2 x f64)"),
-        );
-        features.insert(
+            feature_info.has_sse2(),
+            "128-bit vector (2 x f64)",
+        ));
+        features.entry("Basic").or_default().push((
             "sse3",
-            (
-                "Basic",
-                feature_info.has_sse3(),
-                "Additional horizontal operations",
-            ),
-        );
-        features.insert(
+            feature_info.has_sse3(),
+            "Additional horizontal operations",
+        ));
+        features.entry("Basic").or_default().push((
             "ssse3",
-            ("Basic", feature_info.has_ssse3(), "Shuffle+arithmetic ops"),
-        );
-        features.insert(
+            feature_info.has_ssse3(),
+            "Shuffle+arithmetic ops",
+        ));
+        features.entry("Basic").or_default().push((
             "sse4.1",
-            (
-                "Basic",
-                feature_info.has_sse41(),
-                "Dot product, streaming load",
-            ),
-        );
-        features.insert(
+            feature_info.has_sse41(),
+            "Dot product, streaming load",
+        ));
+        features.entry("Basic").or_default().push((
             "sse4.2",
-            ("Basic", feature_info.has_sse42(), "String/text processing"),
-        );
+            feature_info.has_sse42(),
+            "String/text processing",
+        ));
     }
 
     // AVX features
     if let Some(extended_features) = cpuid.get_extended_feature_info() {
-        features.insert(
+        features.entry("AVX").or_default().push((
             "avx",
-            (
-                "AVX",
-                extended_features.has_adx(),
-                "256-bit vector (8 x f32)",
-            ),
-        );
-        features.insert(
+            extended_features.has_adx(),
+            "256-bit vector (8 x f32)",
+        ));
+        features.entry("AVX").or_default().push((
             "avx2",
-            (
-                "AVX",
-                extended_features.has_avx2(),
-                "256-bit vector (integers)",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx2(),
+            "256-bit vector (integers)",
+        ));
+        features.entry("AVX").or_default().push((
             "fma",
-            (
-                "AVX",
-                extended_features.has_avx_ifma(),
-                "Fused multiply-add",
-            ),
-        );
+            extended_features.has_avx_ifma(),
+            "Fused multiply-add",
+        ));
 
         // AVX-512 features
-        features.insert(
+        features.entry("AVX-512").or_default().push((
             "avx512f",
-            (
-                "AVX-512",
-                extended_features.has_avx512f(),
-                "512-bit vector foundation",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512f(),
+            "512-bit vector foundation",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512bw",
-            (
-                "AVX-512",
-                extended_features.has_avx512bw(),
-                "Byte/word operations",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512bw(),
+            "Byte/word operations",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512cd",
-            (
-                "AVX-512",
-                extended_features.has_avx512cd(),
-                "Conflict detection",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512cd(),
+            "Conflict detection",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512dq",
-            (
-                "AVX-512",
-                extended_features.has_avx512dq(),
-                "Doubleword/quadword ops",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512dq(),
+            "Doubleword/quadword ops",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512vl",
-            (
-                "AVX-512",
-                extended_features.has_avx512vl(),
-                "Vector length extensions",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512vl(),
+            "Vector length extensions",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512ifma",
-            (
-                "AVX-512",
-                extended_features.has_avx512_ifma(),
-                "Integer fused multiply-add",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512_ifma(),
+            "Integer fused multiply-add",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512vbmi",
-            (
-                "AVX-512",
-                extended_features.has_avx512vbmi(),
-                "Vector byte manipulation",
-            ),
-        );
-        features.insert(
+            extended_features.has_avx512vbmi(),
+            "Vector byte manipulation",
+        ));
+        features.entry("AVX-512").or_default().push((
             "avx512vpopcntdq",
-            (
-                "AVX-512",
-                extended_features.has_avx512vpopcntdq(),
-                "Population count",
-            ),
-        );
+            extended_features.has_avx512vpopcntdq(),
+            "Population count",
+        ));
 
         // Other SIMD-relevant features
-        features.insert(
+        features.entry("Other").or_default().push((
             "bmi1",
-            (
-                "Other",
-                extended_features.has_bmi1(),
-                "Bit manipulation set 1",
-            ),
-        );
-        features.insert(
+            extended_features.has_bmi1(),
+            "Bit manipulation set 1",
+        ));
+        features.entry("Other").or_default().push((
             "bmi2",
-            (
-                "Other",
-                extended_features.has_bmi2(),
-                "Bit manipulation set 2",
-            ),
-        );
-        features.insert(
+            extended_features.has_bmi2(),
+            "Bit manipulation set 2",
+        ));
+        features.entry("Other").or_default().push((
             "popcnt",
-            (
-                "Other",
-                extended_features.has_avx512vpopcntdq(),
-                "Population count",
-            ),
-        );
+            extended_features.has_avx512vpopcntdq(),
+            "Population count",
+        ));
     }
 
-    // Display feature table
-    let mut last_category = "";
-    for (feature_name, (category, supported, usage)) in features.iter() {
-        if *category != last_category {
-            table.add_row(row![category.to_string().bold(), "", "", ""]);
-            last_category = category;
+    // Display feature tables by category
+    for (category, features) in features.iter() {
+        let mut table = Table::new();
+        table.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
+        table.set_titles(row![
+            format!("{} Features", category).yellow().bold(),
+            "Supported".yellow().bold(),
+            "Usage".yellow().bold()
+        ]);
+
+        for (feature_name, supported, usage) in features {
+            let support_status = if *supported {
+                "✓".green().bold()
+            } else {
+                "✗".red()
+            };
+
+            table.add_row(row![feature_name, support_status, usage]);
         }
 
-        let support_status = if *supported {
-            "✓".green().bold()
-        } else {
-            "✗".red()
-        };
-
-        table.add_row(row!["", feature_name, support_status, usage]);
+        println!();
+        table.printstd();
     }
-
-    table.printstd();
 
     // Recommendation section
     println!("\n{}", "SIMD Programming Recommendations:".green().bold());
 
-    let avx512 = features.get("avx512f").map_or(false, |&(_, s, _)| s);
-    let avx2 = features.get("avx2").map_or(false, |&(_, s, _)| s);
-    let sse2 = features.get("sse2").map_or(false, |&(_, s, _)| s);
+    let avx512 = features
+        .get("AVX-512")
+        .and_then(|f| f.iter().find(|(name, _, _)| *name == "avx512f"))
+        .map_or(false, |(_, s, _)| *s);
+    let avx2 = features
+        .get("AVX")
+        .and_then(|f| f.iter().find(|(name, _, _)| *name == "avx2"))
+        .map_or(false, |(_, s, _)| *s);
+    let sse2 = features
+        .get("Basic")
+        .and_then(|f| f.iter().find(|(name, _, _)| *name == "sse2"))
+        .map_or(false, |(_, s, _)| *s);
 
     if avx512 {
         println!("✓ Optimal: Use 512-bit vectors (16 x f32, 8 x f64)");
