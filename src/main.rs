@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 
 fn main() {
     let cpuid = CpuId::new();
-    println!("{}", "CPU SIMD Capabilities Detector".green().bold());
+    println!("{}", "CPU SIMD Capabilities".green().bold());
 
     // Display processor info
     if let Some(vendor_info) = cpuid.get_vendor_info() {
