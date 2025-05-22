@@ -5,7 +5,12 @@ edition = "2024"
 description = """
 lanecheck is a simple cli tool that will give you a diagnostic readout of what SIMD features your _current_ machine's CPU supports.
 """
-authors = ["jer<alphastrata@gmail.com>"]
+authors = ["jer <alphastrata@gmail.com>"]
+keywords = ["SIMD", "AVX"]
+documentation = "https://www.github.com/alphastrata/lanecheck"
+license = "MIT"
+homepage = "https://www.jeremyfwebb.ninja"
+publish = true
 
 [dependencies]
 colored = "3.0.0"
