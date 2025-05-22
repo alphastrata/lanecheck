@@ -11,7 +11,7 @@ So, I've been doing a lot of SIMD lately and I like to know what is available on
 
 or,
 
-`cargo install --path .` or `cargo install --git https://github.com/alphastrata/lanecheck`
+`cargo install --path .` or `cargo install --git https://github.com/alphastrata/lanecheck` or `cargo install lanecheck`
 
 `lanecheck`
 
