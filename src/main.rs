@@ -174,15 +174,15 @@ fn main() {
     let avx512 = features
         .get("AVX-512")
         .and_then(|f| f.iter().find(|(name, _, _)| *name == "avx512f"))
-        .map_or(false, |(_, s, _)| *s);
+        .is_some_and(|(_, s, _)| *s);
     let avx2 = features
         .get("AVX")
         .and_then(|f| f.iter().find(|(name, _, _)| *name == "avx2"))
-        .map_or(false, |(_, s, _)| *s);
+        .is_some_and(|(_, s, _)| *s);
     let sse2 = features
         .get("Basic")
         .and_then(|f| f.iter().find(|(name, _, _)| *name == "sse2"))
-        .map_or(false, |(_, s, _)| *s);
+        .is_some_and(|(_, s, _)| *s);
 
     if avx512 {
         println!("✓ Optimal: Use 512-bit vectors (16 x f32, 8 x f64)");
