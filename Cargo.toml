@@ -11,6 +11,7 @@ documentation = "https://www.github.com/alphastrata/lanecheck"
 license = "MIT"
 homepage = "https://www.jeremyfwebb.ninja"
 publish = true
+repository = "https://github.com/alphastrata/lanecheck/"
 
 [dependencies]
 colored = "3.0.0"
